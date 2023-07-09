@@ -1,0 +1,61 @@
+{
+	"pages": [{
+		"path": "pages/index/index",
+		"style": {
+			"navigationBarBackgroundColor": "#fff",
+			"enablePullDownRefresh": true,
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/login/login",
+		"style": {
+			"enablePullDownRefresh": false,
+			"backgroundColor": "#fff",
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}, {
+		"path": "pages/login/personal/personal",
+		"style": {
+			"navigationBarTitleText": "用户协议",
+			"enablePullDownRefresh": false
+		}
+	}, {
+		"path": "pages/login/privacy/privacy",
+		"style": {
+			"navigationBarTitleText": "隐私协议",
+			"enablePullDownRefresh": false
+		}
+	}, {
+		"path": "pages/complete/complete",
+		"style": {
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false,
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+
+	}, {
+		"path": "pages/login/hint/hint",
+		"style": {
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false,
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	}],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "消化疾病数据采集",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8",
+		"app-plus": {
+			"background": "#efeff4"
+		}
+	}
+}

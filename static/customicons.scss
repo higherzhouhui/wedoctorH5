@@ -1,0 +1,22 @@
+$primaryColor: #377BEE; // 定义颜色变量
+
+@font-face {
+  font-family: "customicons"; /* Project id 2878519 */
+  src:url('/static/customicons.ttf') format('truetype');
+}
+
+.customicons {
+  font-family: "customicons" !important;
+}
+
+.youxi:before {
+  content: "\e60e";
+}
+
+.wenjian:before {
+  content: "\e60f";
+}
+
+.zhuanfa:before {
+  content: "\e610";
+}
