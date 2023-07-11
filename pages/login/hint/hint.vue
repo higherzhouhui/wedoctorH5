@@ -5,7 +5,7 @@
 				消化领域疾病表现及治疗方案数据问卷
 			</view>
 			<view class="content">
-				为了给您提供更好的服务，希望您能抽出几分钟时间，将您的感受和建议告诉我们，我们非常重视每位患者的宝贵意见，期待您的参与，现在我们马上开始吧！
+				为了给您提供更好的服务，希望您能抽出几分钟时间，将您的基本情况和建议告诉我们，我们非常重视每位患者的宝贵意见，期待您的参与，现在我们马上开始吧！
 			</view>
 		</view>
 		<view class="btn" @tap="handleBegin()">开始答题</view>
@@ -40,7 +40,7 @@
 	min-height: 100vh;
 	.firstQuestion {
 		padding: 32px 22px;
-		margin-top: -30px;
+		margin-top: -50px;
 		.title {
 			text-align: center;
 			font-size: 24px;
@@ -52,7 +52,7 @@
 			margin-top: 12px;
 			font-size: 16px;
 			color: #333;
-			line-height: 21px;
+			line-height: 24px;
 			text-align: center;
 		}
 	}

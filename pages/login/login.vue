@@ -36,7 +36,7 @@
 			</form>
 		</view>
 		<view class="bottom">
-			<text class="agress">Copyright © 1998-2023 微医(WeDoctor)版权所有 </text>
+			<text class="agress">Copyright © 2010-2023 微医(WeDoctor)版权所有</text>
 			<text class="personal" @tap="handleToPages('personal')">《用户协议》</text>
 			<text class="agress">和</text>
 			<text class="personal" @tap="handleToPages('privacy')">《隐私协议》</text>
