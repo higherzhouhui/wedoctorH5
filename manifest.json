@@ -1,7 +1,7 @@
 {
-    "name" : "数据采集系统",
-    "appid" : "__UNI__FD04016",
-    "description" : "数据采集系统",
+    "name" : "消化领域疾病患者临床治疗情况数据收集表",
+    "appid" : "__UNI__G5B38BA7",
+    "description" : "消化领域疾病患者临床治疗情况数据收集表",
     "versionName" : "1.0.1",
     "versionCode" : "100",
     "transformPx" : false,
@@ -132,7 +132,7 @@
         "router" : {
             "mode" : "hash"
         },
-        "title" : "数据采集系统",
+        "title" : "消化领域疾病患者临床治疗情况数据收集表",
         "optimization" : {
             "treeShaking" : {
                 "enable" : true

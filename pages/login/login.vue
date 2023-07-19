@@ -1,9 +1,9 @@
 <template>
 	<view class="container">
 		<view class="main">
-			<view class="logotitle"><image src="../../static/login/top.png" class="logo"></image></view>
-			<view class="title">欢迎使用消化领域疾病表现及治疗方案数据采集问卷</view>
-			<view class="subtitle">此问卷需要登录后填答</view>
+			<!-- <view class="logotitle"><image src="../../static/login/top.png" class="logo"></image></view> -->
+			<view class="title">欢迎来到消化领域疾病患者临床治疗情况数据收集表</view>
+			<view class="subtitle">此收集表需要登录后填答</view>
 			<form class="formStyle" @submit="formSubmit">
 				
 				<view class="label">
@@ -32,11 +32,12 @@
 					<text class="errorText">{{ errorMsg }}</text>
 				</view>
 	
-				<button class="submit" form-type="submit" :loading="loading">登陆</button>
+				<button class="submit" form-type="submit" :loading="loading">登录</button>
 			</form>
 		</view>
 		<view class="bottom">
-			<text class="agress">Copyright © 2010-2023 微医(WeDoctor)版权所有</text>
+			<text class="agress">Copyright © 2010-2023 版权所有</text>
+			<a href="https://beian.miit.gov.cn/" target="_blank">渝ICP备2023007595号-1</a>
 			<text class="personal" @tap="handleToPages('personal')">《用户协议》</text>
 			<text class="agress">和</text>
 			<text class="personal" @tap="handleToPages('privacy')">《隐私协议》</text>
@@ -229,7 +230,7 @@
 	}
 
 	.main {
-		padding: 30px 18px 0;
+		padding: 80px 18px 0;
 		position: relative;
 		z-index: 9;
 	}

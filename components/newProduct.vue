@@ -2,7 +2,7 @@
 	<view>
 		<view class="product">
 			<view class="title">
-				<view class="fenlei">{{product.fenlei}}</view>
+				<!-- <view class="fenlei">{{product.fenlei}}</view> -->
 				<text class="must">*</text>
 				<text class="xh">{{numberToSort(product.index - product.diff)}}</text>
 				<text class="qs">{{product.qs}}({{product.type == 'single' ? '单选' : '多选'}})</text>
