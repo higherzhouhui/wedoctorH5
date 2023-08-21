@@ -164,13 +164,13 @@ uni.addInterceptor('request', {
 				break;
 		}
 		//处理状态码
-		if (args.statusCode !== 200 && args.statusCode !== 404) {
-			uni.showToast({
-				title: args.message,
-				icon: 'none'
-			})
-			return Promise.reject(args.message);
-		}
+		// if (args.statusCode !== 200 && args.statusCode !== 404) {
+		// 	uni.showToast({
+		// 		title: args.message,
+		// 		icon: 'none'
+		// 	})
+		// 	return Promise.reject(args.message);
+		// }
 		//处理消息码
 		if (args.data && args.data.code !== 200) {
 			if (args.data.code === 401 || args.data.code === 998) {

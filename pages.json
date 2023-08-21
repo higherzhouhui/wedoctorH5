@@ -51,7 +51,7 @@
 	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "消化疾病数据采集",
+		"navigationBarTitleText": "消化疾病数据收集",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8",
 		"app-plus": {

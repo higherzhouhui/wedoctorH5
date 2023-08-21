@@ -1,13 +1,11 @@
 <template>
 	<view class="container">
 		<view class="main">
-			<!-- <view class="logotitle"><image src="../../static/login/top.png" class="logo"></image></view> -->
 			<view class="title">欢迎来到消化领域疾病患者临床治疗情况数据收集表</view>
 			<view class="subtitle">此收集表需要登录后填答</view>
 			<form class="formStyle" @submit="formSubmit">
-				
 				<view class="label">
-					<image src="../../static/login/phone.png" class="phoneImg"></image>请输入您的手机号
+					<image src="../../static/login/phone.png" class="phoneImg"></image>手机号
 				</view>
 				<view class="inputForm">
 					<input name="phone" type="tel" maxlength="11" v-model="phone" class="inputStyle"
@@ -16,7 +14,7 @@
 						@tap="() => phone = ''"></image>
 				</view>
 				<view class="label">
-					<image src="../../static/login/yzm.png" class="phoneImg"></image>请输入验证码
+					<image src="../../static/login/yzm.png" class="phoneImg"></image>验证码
 				</view>
 				<view class="inputForm">
 					<input name="code" type="tel" maxlength="6" v-model="code" class="inputStyle"
@@ -27,11 +25,19 @@
 						{{downTime ? `${downTime}秒后重发` : '获取验证码'}}
 					</view>
 				</view>
+				<view class="label">
+					<image src="../../static/login/qd.png" class="phoneImg"></image>渠道号
+				</view>
+				<view class="inputForm">
+					<input name="qudao" type="text" maxlength="11" v-model="qudao" class="inputStyle"
+						placeholder="请输入渠道号">
+					<image v-if="qudao" src="../../static/login/close.png" class="clear"
+						@tap="() => qudao = ''"></image>
+				</view>
 				<view class="errorWrapper" v-if="errorMsg">
 					<image src="../../static/login/error.png" class="errorImg"></image>
 					<text class="errorText">{{ errorMsg }}</text>
 				</view>
-	
 				<button class="submit" form-type="submit" :loading="loading">登录</button>
 			</form>
 		</view>
@@ -73,13 +79,13 @@
 			this.int()
 		},
 		onLoad() {
-			getQudaoInfo().then(res =>{
-				if (res.code === 200) {
-					if (res.data && res.data.name) {
-						this.qudao = res.data.name
-					}
-				}
-			})
+			// getQudaoInfo().then(res =>{
+			// 	if (res.code === 200) {
+			// 		if (res.data && res.data.name) {
+			// 			this.qudao = res.data.name
+			// 		}
+			// 	}
+			// })
 		},
 		onUnload() {
 			clearInterval(this.timer)
@@ -138,9 +144,10 @@
 				}
 				const {
 					phone,
-					code
+					code,
+					qudao
 				} = data?.detail?.value
-			
+				
 				if (!phone) {
 					this.errorMsg = '手机号不能为空'
 					return
@@ -154,11 +161,15 @@
 					this.errorMsg = '验证码不能为空'
 					return
 				}
+				if (!qudao) {
+					this.errorMsg = '渠道号不能为空'
+					return
+				}
 				this.loading = true
 				this.PhoneLogin({
 					phone: phone,
 					code: code,
-					qudao: this.qudao,
+					qudao: qudao,
 				}).then(response => {
 					this.loading = false
 					if (response.code === 200) {
