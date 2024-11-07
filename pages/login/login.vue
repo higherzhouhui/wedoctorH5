@@ -1,8 +1,8 @@
 <template>
 	<view class="container">
 		<view class="main">
-			<view class="title">欢迎来到消化领域疾病患者临床治疗情况数据收集表</view>
-			<view class="subtitle">此收集表需要登录后填答</view>
+			<view class="title">欢迎来到{{title}}</view>
+			<view class="subtitle">此问卷表需要登录后填答</view>
 			<form class="formStyle" @submit="formSubmit">
 				<view class="label">
 					<image src="../../static/login/phone.png" class="phoneImg"></image>手机号
@@ -42,7 +42,7 @@
 			</form>
 		</view>
 		<view class="bottom">
-			<text class="agress">Copyright © 2010-2023 版权所有</text>
+			<text class="agress">Copyright © 2010-2026 版权所有</text>
 			<a href="https://beian.miit.gov.cn/" target="_blank">渝ICP备2023007595号-1</a>
 			<text class="personal" @tap="handleToPages('personal')">《用户协议》</text>
 			<text class="agress">和</text>
@@ -61,7 +61,7 @@
 	} from "@/common/util/constants"
 	import {
 		getCodeRequest,
-		getQudaoInfo,
+		getSysInfo,
 	} from "@/api/user"
 	export default {
 		data() {
@@ -73,19 +73,36 @@
 				downTime: 0,
 				timer: '',
 				qudao: '',
+				title: '',
 			}
 		},
 		onShow() {
 			this.int()
 		},
 		onLoad() {
-			// getQudaoInfo().then(res =>{
-			// 	if (res.code === 200) {
-			// 		if (res.data && res.data.name) {
-			// 			this.qudao = res.data.name
-			// 		}
-			// 	}
-			// })
+			uni.showLoading()
+			getSysInfo().then(res =>{
+				uni.hideLoading()
+				if (res.code === 200) {
+					const data = res.data
+					if (data.info) {
+						this.title = data.info.title
+						uni.setStorageSync('title', data.info.title)
+					} else {
+						uni.showModal({
+							title: '温馨提示',
+							content: '该问卷暂未开放，请咨询工作人员！\n(感谢您的配合与支持)',
+							showCancel: false,
+							confirmText: ''
+						})
+					}
+					if (data.channel) {
+						this.qudao = data.channel
+					}
+				}
+			}).catch(() => {
+				uni.hideLoading()
+			})
 		},
 		onUnload() {
 			clearInterval(this.timer)
@@ -169,7 +186,7 @@
 				this.PhoneLogin({
 					phone: phone,
 					code: code,
-					qudao: qudao,
+					channel: qudao,
 				}).then(response => {
 					this.loading = false
 					if (response.code === 200) {
@@ -250,6 +267,8 @@
 		display: flex;
 		align-items: center;
 		margin: 25px 0 17px 0;
+		font-size: 15px;
+		gap: 2px;
 	}
 
 	.label:first-child {

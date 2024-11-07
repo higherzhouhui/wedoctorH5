@@ -14,7 +14,7 @@
 
 		</view>
 		<view class="bottom">
-			<text class="agress">Copyright © 2010-2023 版权所有</text>
+			<text class="agress">Copyright © 2010-2026 版权所有</text>
 			<a href="https://beian.miit.gov.cn/" target="_blank">渝ICP备2023007595号-1</a>
 			<text class="personal" @tap="handleToPages('personal')">《用户协议》</text>
 			<text class="agress">和</text>
@@ -43,17 +43,24 @@
 			newProduct,
 		},
 		onLoad(options) {
-			this.review = options.review || this.$store.state.userInfo.iscomplete == 1 || 0
+			// this.review = options.review || this.$store.state.userInfo.iscomplete == 1 || 0
 			this.getHomeData()
 		},
 
 		methods: {
 			getHomeData() {
+				if (this.$store.state.userInfo.is_complete) {
+					uni.navigateTo({
+						url: '/pages/complete/complete'
+					})
+				}
 				this.retry += 1;
+				uni.showLoading()
 				getQuestionList().then(res => {
+					uni.hideLoading()
 					if (res.code === 200) {
-						this.questionList = res.data.list
-						this.total = res.data.totalSize
+						this.questionList = res.data
+						this.total = res.data.length
 					} else {
 						if (this.retry < 5) {
 							this.getHomeData()
@@ -64,6 +71,8 @@
 							})
 						}
 					}
+				}).catch(() => {
+					uni.hideLoading()
 				})
 			},
 			handleToPages(page) {
@@ -80,10 +89,16 @@
 			
 			skipRelate(currentIndex) {
 				const nextIndex = currentIndex + 1
-				const { relateId, id } = this.questionList[nextIndex]
-				if (relateId) {
-					const qsid = relateId.split('||')[0]
-					const option = relateId.split('||')[1]
+				if (!this.questionList[nextIndex]) {
+					return
+				}
+				const { relate, id } = this.questionList[nextIndex]
+				if (relate) {
+					const obj = JSON.parse(relate)
+					
+					const qsid = obj.questionId
+					const option = obj.optionId
+					
 					const userInfo = this.$store.state.userInfo
 					const qsArray = userInfo.qs.split('||')
 					const chooseArray = userInfo.choose.split('||')
@@ -165,10 +180,11 @@
 		.progress {
 			width: calc(100vw - 24px);
 			margin-left: 12px;
-			height: 3px;
+			height: 5px;
 			background: #fff;
 			position: relative;
-
+			border-radius: 12px;
+			overflow: hidden;
 			.zhanbi {
 				position: absolute;
 				left: 0;

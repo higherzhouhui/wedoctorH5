@@ -5,7 +5,7 @@
 				<!-- <view class="fenlei">{{product.fenlei}}</view> -->
 				<text class="must">*</text>
 				<text class="xh">{{numberToSort(product.index - product.diff)}}</text>
-				<text class="qs">{{product.qs}}({{product.type == 'single' ? '单选' : '多选'}})</text>
+				<text class="qs">{{product.title}}({{product.type == 0 ? '单选' : '多选'}})</text>
 				<view v-show="errorFlag" class="error">这道题未回答</view>
 			</view>
 			<view class="options">
@@ -33,7 +33,7 @@
 			return {
 				list: [],
 				errorFlag: false,
-				listStyle: ['A','B','C','D','E','F','G','H','I','J']
+				listStyle: ['A','B','C','D','E','F','G','H','I','J', 'K','L', 'M', 'N', 'O']
 			};
 		},
 		methods: {
@@ -47,7 +47,6 @@
 			getList(newVal) {
 				let chooses = []
 				try {
-					console.log(this.$store.state.userInfo)
 					if (this.$store.state.userInfo.choose) {
 						const chooseArray = this.$store.state.userInfo.choose.split('||')
 						const currentQs = chooseArray[this.product.index - 1] ||''
@@ -58,24 +57,24 @@
 				}
 				
 				this.list = []
-				this.product.options.split('||').forEach((item, index) => {
+				this.product.option_list.forEach((item, index) => {
 					this.list.push({
-						title: item,
-						isSelect: chooses.includes(String(index)),
-						index: index,
+						title: item.title,
+						isSelect: chooses.includes(String(item.id)),
+						id: item.id,
 					})
 				})
 			},
 			chooseList(item) {
 				this.list.map(citem => {
 					this.errorFlag = false
-					if (this.product.type === 'single') {
+					if (this.product.type == '0') {
 						citem.isSelect = false
 					}
 					if (citem.title === item.title) {
-						if (this.product.type === 'single') {
+						if (this.product.type == '0') {
 							citem.isSelect = true
-						} else if (this.product.type === 'multiple'){
+						} else if (this.product.type == '1'){
 							citem.isSelect = !citem.isSelect
 						}
 					}
@@ -86,7 +85,7 @@
 				let cchoose = ''
 				this.list.forEach((item, index) => {
 					if (item.isSelect) {
-						cchoose += item.index + ','
+						cchoose += item.id + ','
 					}
 				})
 				if (!cchoose) {
@@ -112,13 +111,15 @@
 				userInfo.endTime = new Date().getTime()
 				this.$store.commit('SET_USERINFO', userInfo)
 				this.$emit('nextClick')
+				
 				if (this.product.index === this.product.total) {
 					// 提交
-					userInfo.iscomplete = 1
+					userInfo.is_complete = true
 					uni.showLoading({
-						title: '提交中...',
+						title: '正在提交问卷...',
 						icon: 'none'
 					})
+					this.$store.commit('SET_USERINFO', userInfo)
 					resultCreate(userInfo).then(res => {
 						uni.hideLoading()
 						if (res.code === 200) {

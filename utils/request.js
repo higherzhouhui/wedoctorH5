@@ -10,7 +10,7 @@ uni.addInterceptor('request', {
 		//获取token
 		let token = uni.getStorageSync('Access-Token')
 		if (token) {
-			args.header["Access-Token"] = token
+			args.header["authorization"] = `Bearer ${token}`
 		}
 	},
 	success(args) { //成功回调拦截
@@ -173,7 +173,7 @@ uni.addInterceptor('request', {
 		// }
 		//处理消息码
 		if (args.data && args.data.code !== 200) {
-			if (args.data.code === 401 || args.data.code === 998) {
+			if (args.data.code === 401 || args.data.code === 998 || args.data.code === 401) {
 				if (!modelShow) {
 					modelShow = true
 					uni.showModal({

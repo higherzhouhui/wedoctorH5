@@ -8,16 +8,16 @@
 				<image src="../../static/complete/file.png" mode="widthFix" class="file"></image>
 				<image src="../../static/complete/done.png" mode="widthFix" class="done"></image>
 			</view>
-			<view class="anser">您已回答过问卷</view>
+			<view class="anser">您已完成该问卷</view>
 			<view class="btn" @tap="routeToIndex">继续查看问卷</view>
 		</view>
 		<uni-popup ref="operationRef" :animation="true" type="bottom">
 			<view class="lcontent">
 				<view class="top">
 					<view class="retry">{{this.$store.state.userInfo.phone}}(我的手机)</view>
-					<view class="retry" @tap="handleRetry">重新回答</view>
-					<view class="retry" @tap="routeToIndex">继续查看</view>
-					<view class="retry" @tap="handleLogout">退出登录</view>
+					<view class="retry again" @tap="handleRetry">再做一次</view>
+					<view class="retry" @tap="routeToIndex">查看问卷选项</view>
+					<view class="retry quit" @tap="handleLogout">退出登录</view>
 				</view>
 				<view class="logout" @tap="handleCancel">取消</view>
 			</view>
@@ -41,6 +41,7 @@
 				// uni.navigateTo({
 				// 	url: '/pages/index/index?review=1'
 				// })
+				this.$store.commit('SET_USERINFO', {...this.$store.state.userInfo, is_complete: false})
 				this.$Router.replaceAll({ name: 'index' })
 			},
 			handleShowPop() {
@@ -53,7 +54,7 @@
 				const userInfo = this.$store.state.userInfo
 				userInfo.qs = ''
 				userInfo.choose = ''
-				userInfo.iscomplete = 0
+				userInfo.is_complete = false
 				userInfo.startTime = new Date().getTime()
 				this.$store.commit('SET_USERINFO', userInfo)
 				this.$Router.replaceAll({ name: 'index' })
@@ -79,8 +80,8 @@
 	position: relative;
 	.avatar {
 		position: fixed;
-		right: 10px;
-		top: 10px;
+		right: 2rem;
+		top: 3rem;
 		.theavatar {
 			border: 2px solid #fff;
 			width: 40px;
@@ -153,10 +154,17 @@
 				font-size: 17px
 			}
 			.retry:first-child {
-				color: #999;
+				color: #666;
+				font-weight: bold;
 			}
 			.retry:last-child {
 				border: none;
+			}
+			.quit {
+				color: #aa0000;
+			}
+			.again {
+				color: #17eb3c;
 			}
 		}
 		.logout {
@@ -165,7 +173,7 @@
 			height: 50px;
 			text-align: center;
 			line-height: 50px;
-			color: #aa0000;
+			color: #666;
 			font-size: 17px;
 			background: #fff;
 		}

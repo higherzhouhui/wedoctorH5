@@ -1,8 +1,9 @@
 <template>
 	<view class="container">
 		<view class="firstQuestion">
+			<image src="/static/tian.png" class="tian" mode="widthFix"></image>
 			<view class="title">
-				消化领域疾病表现及治疗方案数据问卷
+				{{title || '消化领域疾病表现及治疗方案数据问卷'}}
 			</view>
 			<view class="content">
 				为了给您提供更好的服务，希望您能抽出几分钟时间，将您的基本情况和建议告诉我们，我们非常重视每位患者的宝贵意见，期待您的参与，现在我们马上开始吧！
@@ -16,7 +17,7 @@
 	export default {
 		data() {
 			return {
-				
+				title: uni.getStorageSync('title')
 			}
 		},
 		methods: {
@@ -40,7 +41,11 @@
 	min-height: 100vh;
 	.firstQuestion {
 		padding: 32px 22px;
-		margin-top: -50px;
+		margin-top: -20vh;
+		text-align: center;
+		.tian {
+			width: 128px;
+		}
 		.title {
 			text-align: center;
 			font-size: 24px;
@@ -61,7 +66,7 @@
 		width: 90%;
 		left: 5%;
 		border-radius: 12px;
-		bottom: 10px;
+		bottom: 50px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
