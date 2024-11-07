@@ -97,7 +97,7 @@
 						})
 					}
 					if (data.channel) {
-						this.qudao = data.channel
+						this.qudao = data.channel.title
 					}
 				}
 			}).catch(() => {
