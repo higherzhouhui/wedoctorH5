@@ -173,7 +173,7 @@ uni.addInterceptor('request', {
 		// }
 		//处理消息码
 		if (args.data && args.data.code !== 200) {
-			if (args.data.code === 401 || args.data.code === 998 || args.data.code === 401) {
+			if (args.data.code === 401 || args.data.code === 998 || args.data.code === 403) {
 				if (!modelShow) {
 					modelShow = true
 					uni.showModal({
