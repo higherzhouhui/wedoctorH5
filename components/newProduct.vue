@@ -5,14 +5,21 @@
 				<!-- <view class="fenlei">{{product.fenlei}}</view> -->
 				<text class="must">*</text>
 				<text class="xh">{{numberToSort(product.index - product.diff)}}</text>
-				<text class="qs">{{product.title}}({{product.type == 0 ? '单选' : '多选'}})</text>
+				<text
+					class="qs">{{product.title}}({{product.type == 0 ? '单选' : product.type == 1 ? '多选' : '填空'}})</text>
 				<view v-show="errorFlag" class="error">这道题未回答</view>
 			</view>
-			<view class="options">
-				<view class="list" v-for="(item, index) in list" :class="item.isSelect ? 'selected' : ''" @tap="chooseList(item)" :key="item.title">
+			<view class="input-wrapper" v-if="product.type == 2">
+				<input v-model="value" placeholder="请输入回答内容" />
+				<image v-if="value" src="../static/login/close.png" class="clear" @tap="() => value = ''"></image>
+			</view>
+			<view class="options" v-else>
+				<view class="list" v-for="(item, index) in list" :class="item.isSelect ? 'selected' : ''"
+					@tap="chooseList(item)" :key="item.title">
 					{{listStyle[index]}}.{{item.title}}
 				</view>
 			</view>
+
 		</view>
 		<view class="nextStep preStep" @tap="handlePre" v-if="product.index !== 1">上一题</view>
 		<view class="nextStep" @tap="handleNext">{{product.index === product.total ? '提交问卷' : '下一题'}}</view>
@@ -20,10 +27,12 @@
 </template>
 
 <script>
-	import { resultCreate } from '@/api/user.js'
+	import {
+		resultCreate
+	} from '@/api/user.js'
 	export default {
-		name:"newProduct",
-		props:{
+		name: "newProduct",
+		props: {
 			product: {
 				type: Object,
 				default: {},
@@ -32,8 +41,9 @@
 		data() {
 			return {
 				list: [],
+				value: '',
 				errorFlag: false,
-				listStyle: ['A','B','C','D','E','F','G','H','I','J', 'K','L', 'M', 'N', 'O']
+				listStyle: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O']
 			};
 		},
 		methods: {
@@ -49,21 +59,29 @@
 				try {
 					if (this.$store.state.userInfo.choose) {
 						const chooseArray = this.$store.state.userInfo.choose.split('||')
-						const currentQs = chooseArray[this.product.index - 1] ||''
+						const currentQs = chooseArray[this.product.index - 1] || ''
 						chooses = currentQs.split(',')
 					}
-				} catch(error) {
+				} catch (error) {
 					console.log(error)
 				}
-				
-				this.list = []
-				this.product.option_list.forEach((item, index) => {
-					this.list.push({
-						title: item.title,
-						isSelect: chooses.includes(String(item.id)),
-						id: item.id,
+				if (this.product.type == 2) {
+					if (chooses.length) {
+						this.value = chooses[0]
+					} else {
+						this.value = ''
+					}
+				} else {
+					this.list = []
+					this.product.option_list.forEach((item, index) => {
+						this.list.push({
+							title: item.title,
+							isSelect: chooses.includes(String(item.id)),
+							id: item.id,
+						})
 					})
-				})
+				}
+
 			},
 			chooseList(item) {
 				this.list.map(citem => {
@@ -74,7 +92,7 @@
 					if (citem.title === item.title) {
 						if (this.product.type == '0') {
 							citem.isSelect = true
-						} else if (this.product.type == '1'){
+						} else if (this.product.type == '1') {
 							citem.isSelect = !citem.isSelect
 						}
 					}
@@ -88,12 +106,17 @@
 						cchoose += item.id + ','
 					}
 				})
+				if (this.product.type == 2) {
+					cchoose = this.value + ','
+					this.value = ''
+				}
 				if (!cchoose) {
 					this.errorFlag = true
 					return
 				}
 				// 截取最后一个逗号
 				cchoose = cchoose.substring(0, cchoose.length - 1)
+
 				let chooseArray = []
 				let qsArray = []
 				if (this.$store.state.userInfo.choose) {
@@ -111,7 +134,7 @@
 				userInfo.endTime = new Date().getTime()
 				this.$store.commit('SET_USERINFO', userInfo)
 				this.$emit('nextClick')
-				
+
 				if (this.product.index === this.product.total) {
 					// 提交
 					userInfo.is_complete = true
@@ -153,67 +176,77 @@
 </script>
 
 <style scoped lang="scss">
-@import "@/static/customicons.scss";
-.product {
-	background: #fff;
-	padding: 20px 12px 0 12px;
-	margin-bottom: 30px;
-	.title {
-		font-size: 18px;
-		font-weight: bold;
-		line-height: 32px;
-		word-break: break-all;
-		margin-bottom: 12px;
-		.must {
-			color: #ff0a0e;
+	@import "@/static/customicons.scss";
+
+	.product {
+		background: #fff;
+		padding: 20px 12px 0 12px;
+		margin-bottom: 30px;
+
+		.title {
+			font-size: 18px;
+			font-weight: bold;
+			line-height: 32px;
+			word-break: break-all;
+			margin-bottom: 12px;
+
+			.must {
+				color: #ff0a0e;
+			}
+
+			.xh {
+				margin-right: 4px;
+			}
+
+			.error {
+				background: #FFEBEB;
+				border-radius: 4px;
+				display: flex;
+				align-items: center;
+				opacity: 1;
+				margin-top: 4px;
+				animation: doudong 1.5s .15s linear forwards;
+				font-size: 13px;
+				font-family: PingFang SC-Regular, PingFang SC;
+				font-weight: 400;
+				color: #FF4B4B;
+				line-height: 20px;
+				padding: 0 6px;
+				width: max-content;
+			}
+
+			.review {
+				color: #0055ff;
+			}
 		}
-		.xh {
-			margin-right: 4px;
+
+		.fenlei {
+			text-align: center;
+			border-bottom: 1px solid #797979;
+			padding-bottom: 6px;
+			margin-bottom: 6px;
+			color: #776c6c;
 		}
-		.error {
-			background: #FFEBEB;
-			border-radius: 4px;
-			display: flex;
-			align-items: center;
-			opacity: 1;
-			margin-top: 4px;
-			animation: doudong 1.5s .15s linear forwards;
-			font-size: 13px;
-			font-family: PingFang SC-Regular, PingFang SC;
-			font-weight: 400;
-			color: #FF4B4B;
-			line-height: 20px;
-			padding: 0 6px;
-			width: max-content;
-		}
-		.review {
-			color: #0055ff;
+
+		.options {
+			.list {
+				display: flex;
+				line-height: 24px;
+				padding: 6px 12px;
+				font-size: 15px;
+				color: #222;
+				border-top: 1px solid #eee;
+				transition: all 0.3s;
+				list-style: lower-roman;
+			}
+
+			.selected {
+				background: #00aa00;
+				color: #fff;
+			}
 		}
 	}
-	.fenlei {
-		text-align: center;
-		border-bottom: 1px solid #797979;
-		padding-bottom: 6px;
-		margin-bottom: 6px;
-		color: #776c6c;
-	}
-	.options {
-		.list {
-			display: flex;
-			line-height: 24px;
-			padding: 6px 12px;
-			font-size: 15px;
-			color: #222;
-			border-top: 1px solid #eee;
-			transition: all 0.3s;
-			list-style: lower-roman;
-		}
-		.selected {
-			background: #00aa00;
-			color: #fff;
-		}
-	}
-}
+
 	.nextStep {
 		height: 36px;
 		line-height: 36px;
@@ -225,10 +258,27 @@
 		text-align: center;
 		width: calc(100vw - 36px);
 	}
+
 	.preStep {
 		background: #fff;
 		color: $primaryColor;
 		border: 1px solid $primaryColor;
 		margin: 0 0 12px 18px;
+	}
+
+	.input-wrapper {
+		border: 1px solid #333;
+		border-radius: 6px;
+		padding: 4px;
+		position: relative;
+
+		.clear {
+			width: 20px;
+			height: 20px;
+			position: absolute;
+			right: 5px;
+			top: 50%;
+			transform: translate(0, -50%);
+		}
 	}
 </style>

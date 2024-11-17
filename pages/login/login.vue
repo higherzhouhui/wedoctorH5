@@ -5,7 +5,7 @@
 			<view class="subtitle">此问卷表需要登录后填答</view>
 			<form class="formStyle" @submit="formSubmit">
 				<view class="label">
-					<image src="../../static/login/phone.png" class="phoneImg"></image>手机号
+					<image src="../../static/login/phone.png" class="phoneImg"></image>签约手机号
 				</view>
 				<view class="inputForm">
 					<input name="phone" type="tel" maxlength="11" v-model="phone" class="inputStyle"
@@ -26,13 +26,13 @@
 					</view>
 				</view>
 				<view class="label">
-					<image src="../../static/login/qd.png" class="phoneImg"></image>渠道号
+					<image src="../../static/login/id.png" class="phoneImg"></image>姓名
 				</view>
 				<view class="inputForm">
-					<input name="qudao" type="text" maxlength="11" v-model="qudao" class="inputStyle"
-						placeholder="请输入渠道号">
-					<image v-if="qudao" src="../../static/login/close.png" class="clear"
-						@tap="() => qudao = ''"></image>
+					<input name="name" type="text" maxlength="20" v-model="name" class="inputStyle"
+						placeholder="请输入姓名">
+					<image v-if="name" src="../../static/login/close.png" class="clear"
+						@tap="() => name = ''"></image>
 				</view>
 				<view class="errorWrapper" v-if="errorMsg">
 					<image src="../../static/login/error.png" class="errorImg"></image>
@@ -72,7 +72,7 @@
 				code: '',
 				downTime: 0,
 				timer: '',
-				qudao: '',
+				name: '',
 				title: '',
 			}
 		},
@@ -96,9 +96,9 @@
 							confirmText: ''
 						})
 					}
-					if (data.channel) {
-						this.qudao = data.channel.title
-					}
+					// if (data.channel) {
+					// 	this.qudao = data.channel.title
+					// }
 				}
 			}).catch(() => {
 				uni.hideLoading()
@@ -162,7 +162,7 @@
 				const {
 					phone,
 					code,
-					qudao
+					name
 				} = data?.detail?.value
 				
 				if (!phone) {
@@ -178,15 +178,15 @@
 					this.errorMsg = '验证码不能为空'
 					return
 				}
-				if (!qudao) {
-					this.errorMsg = '渠道号不能为空'
+				if (!name) {
+					this.errorMsg = '姓名不能为空'
 					return
 				}
 				this.loading = true
 				this.PhoneLogin({
 					phone: phone,
 					code: code,
-					channel: qudao,
+					name: name,
 				}).then(response => {
 					this.loading = false
 					if (response.code === 200) {
