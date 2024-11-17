@@ -107,7 +107,7 @@
 					}
 				})
 				if (this.product.type == 2) {
-					cchoose = this.value + ','
+					cchoose = this.value
 					this.value = ''
 				}
 				if (!cchoose) {
@@ -115,7 +115,9 @@
 					return
 				}
 				// 截取最后一个逗号
-				cchoose = cchoose.substring(0, cchoose.length - 1)
+				if (this.product.type != 2) {
+					cchoose = cchoose.substring(0, cchoose.length - 1)
+				}
 
 				let chooseArray = []
 				let qsArray = []
