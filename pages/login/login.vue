@@ -87,7 +87,7 @@
 					const data = res.data
 					if (data.info) {
 						this.title = data.info.title
-						uni.setStorageSync('title', data.info.title)
+						uni.setStorageSync('questionInfo', JSON.stringify(data.info))
 					} else {
 						uni.showModal({
 							title: '温馨提示',

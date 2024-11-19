@@ -3,10 +3,10 @@
 		<view class="firstQuestion">
 			<image src="/static/tian.png" class="tian" mode="widthFix"></image>
 			<view class="title">
-				{{title || '消化领域疾病表现及治疗方案数据问卷'}}
+				{{questionInfo.title || '消化领域疾病表现及治疗方案数据问卷'}}
 			</view>
 			<view class="content">
-				为了给您提供更好的服务，希望您能抽出几分钟时间，将您的基本情况和建议告诉我们，我们非常重视每位患者的宝贵意见，期待您的参与，现在我们马上开始吧！
+				{{questionInfo.description || `为了给您提供更好的服务，希望您能抽出几分钟时间，将您的基本情况和建议告诉我们，我们非常重视每位患者的宝贵意见，期待您的参与，现在我们马上开始吧！`}}
 			</view>
 		</view>
 		<view class="btn" @tap="handleBegin()">开始答题</view>
@@ -17,7 +17,13 @@
 	export default {
 		data() {
 			return {
-				title: uni.getStorageSync('title')
+				questionInfo: {}
+			}
+		},
+		mounted() {
+			const info = uni.getStorageSync('questionInfo')
+			if (info) {
+				this.questionInfo = JSON.parse(info)
 			}
 		},
 		methods: {

@@ -9,13 +9,14 @@
 				<image src="../../static/complete/done.png" mode="widthFix" class="done"></image>
 			</view>
 			<view class="anser">您已完成该问卷</view>
-			<view class="btn" @tap="routeToIndex">继续查看问卷</view>
+			<view class="btn btn-new" @tap="routeToIndex">继续查看问卷</view>
+			<view class="btn" @tap="handleRetry">填写新问卷</view>
 		</view>
 		<uni-popup ref="operationRef" :animation="true" type="bottom">
 			<view class="lcontent">
 				<view class="top">
 					<view class="retry">{{this.$store.state.userInfo.phone}}(我的手机)</view>
-					<view class="retry again" @tap="handleRetry">再做一次</view>
+					<view class="retry again" @tap="handleRetry">填写新问卷</view>
 					<view class="retry" @tap="routeToIndex">查看问卷选项</view>
 					<view class="retry quit" @tap="handleLogout">退出登录</view>
 				</view>
@@ -124,9 +125,13 @@
 		color: #fff;
 		font-size: 18px;
 		border-radius: 12px;
-		padding: 0 40px;
 		background: $primaryColor;
 		margin-top: 36px;
+		width: 160px;
+	}
+	.btn-new {
+		background: #fff;
+		color: $primaryColor;
 	}
 	@keyframes identifier {
 		0% {
