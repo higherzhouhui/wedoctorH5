@@ -1,7 +1,8 @@
 <template>
 	<view>
-		<view class="avatar" @tap="handleShowPop">
-			<image class="theavatar" src="../static/complete/avatar.png"></image>
+		<view class="avatar" @tap="handleShowPop" :class="home && 'custom'">
+			<image class="theavatar" src="../static/complete/detail.png" v-if="home"></image>
+			<image class="theavatar" src="../static/complete/avatar.png" v-else></image>
 		</view>
 		<uni-popup ref="operationRef" :animation="true" type="bottom">
 			<view class="lcontent">
@@ -23,6 +24,12 @@
 	} from 'vuex'
 	export default {
 		name: "userInfo",
+		props: {
+			home: {
+				type: Boolean,
+				default: false,
+			},
+		},
 		data() {
 			return {
 
@@ -82,14 +89,18 @@
 	.avatar {
 		position: fixed;
 		right: 2rem;
-		top: 3rem;
-
+		top: 2rem;
+		z-index: 99;
 		.theavatar {
 			border: 2px solid #fff;
 			width: 40px;
 			height: 40px;
 			border-radius: 50%;
 		}
+	}
+	.custom {
+		top: 70%;
+		right: 1rem;
 	}
 
 	.lcontent {

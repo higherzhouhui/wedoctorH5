@@ -12,7 +12,7 @@
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarBackgroundColor": "#fff",
-				"enablePullDownRefresh": true,
+				"enablePullDownRefresh": false,
 				"app-plus": {
 					"titleNView": false
 				}
@@ -22,6 +22,7 @@
 			"style": {
 				"enablePullDownRefresh": false,
 				"backgroundColor": "#fff",
+				"navigationStyle": "custom",
 				"app-plus": {
 					"titleNView": false
 				}

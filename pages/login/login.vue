@@ -250,7 +250,8 @@
 
 	.container {
 		background-color: #fff;
-		min-height: 100vh;
+		min-height: 680px;
+		height: 100vh;
 		box-sizing: border-box;
 		background: #E3EBF9;
 		position: relative;

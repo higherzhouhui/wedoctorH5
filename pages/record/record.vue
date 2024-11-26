@@ -10,8 +10,8 @@
 			<view class="header table-list">
 				<view class="header-item header-big">问卷名称</view>
 				<view class="header-item header-big">截止</view>
-				<view class="header-item">需完成</view>
-				<view class="header-item">已完成</view>
+				<view class="header-item">目标</view>
+				<view class="header-item">已收集</view>
 				<!-- <view class="header-item">待完成</view> -->
 			</view>
 			<view class="table-list" v-for="(item,index) in list" :key="index">
@@ -48,7 +48,7 @@
 				uni.hideLoading()
 				if (res.code == 200) {
 					res.data.map((item) =>{
-						item.endTime = moment(item.endTime).format('YYYY-MM-DD')
+						item.endTime = item.endTime ? moment(item.endTime).format('YYYY-MM-DD') : '-'
 					})
 					this.list = res.data
 				}
@@ -59,7 +59,7 @@
 
 <style lang="scss" scoped>
 	.record-content {
-		padding: 0 1rem 1rem 1rem;
+		padding: 0 12px 12px 8px;
 		.user {
 			display: flex;
 			justify-content: space-between;
@@ -69,7 +69,7 @@
 			background: rgba(0, 0, 0, 0.1);
 			border-radius: 8px;
 			min-height: calc(100vh - 200px);
-			padding: 8px;
+			padding: 8px 4px;
 			overflow: auto;
 		}
 		.table-list {

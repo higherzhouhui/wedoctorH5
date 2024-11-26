@@ -1,6 +1,6 @@
 <template>
 	<view class="root">
-		<UserInfo />
+		<UserInfo :home="true"/>
 		<view class="container">
 			<view class="progress">
 				<view class="zhanbi" :style="{width: (index + 1) / total * 100 + '%'}" />
@@ -26,7 +26,7 @@
 
 <script>
 	import newProduct from '@/components/newProduct.vue'
-	
+	import UserInfo from '@/components/userInfo.vue'
 	import {
 		getQuestionList
 	} from '@/api/user'
@@ -43,6 +43,7 @@
 		},
 		components: {
 			newProduct,
+			UserInfo,
 		},
 		onLoad(options) {
 			// this.review = options.review || this.$store.state.userInfo.iscomplete == 1 || 0
@@ -178,7 +179,6 @@
 	.container {
 		position: relative;
 		flex: 1;
-
 		.progress {
 			width: calc(100vw - 24px);
 			margin-left: 12px;
