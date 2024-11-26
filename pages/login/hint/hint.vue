@@ -1,5 +1,6 @@
 <template>
 	<view class="container">
+		<UserInfo></UserInfo>
 		<view class="firstQuestion">
 			<image src="/static/tian.png" class="tian" mode="widthFix"></image>
 			<view class="title">
@@ -14,11 +15,15 @@
 </template>
 
 <script>
+	import UserInfo from '@/components/userInfo.vue'
 	export default {
 		data() {
 			return {
 				questionInfo: {}
 			}
+		},
+		components: {
+			UserInfo
 		},
 		mounted() {
 			const info = uni.getStorageSync('questionInfo')

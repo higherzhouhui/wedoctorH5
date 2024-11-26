@@ -41,5 +41,12 @@ const routes = [
 	        title: '完成',
 	    },
 	},
+	{
+	  path: '/pages/record/record',
+	  name: 'record',
+	    meta: {
+	        title: '记录',
+	    },
+	},
 ]
 export default routes

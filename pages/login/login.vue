@@ -250,17 +250,19 @@
 
 	.container {
 		background-color: #fff;
-		height: 750px;
 		min-height: 100vh;
 		box-sizing: border-box;
 		background: #E3EBF9;
 		position: relative;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-around;
 	}
 
 	.main {
-		padding: 80px 18px 0;
 		position: relative;
 		z-index: 9;
+		padding: 1rem;
 	}
 
 	.label {

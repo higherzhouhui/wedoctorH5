@@ -22,7 +22,9 @@
 
 		</view>
 		<view class="nextStep preStep" @tap="handlePre" v-if="product.index !== 1">上一题</view>
-		<view class="nextStep" @tap="handleNext">{{product.index === product.total ? '提交问卷' : '下一题'}}</view>
+		<view class="nextStep" @tap="handleNext">
+			{{product.index === product.total ? $store.state.userInfo.over_view ? '浏览完成' : '提交问卷' : '下一题'}}
+		</view>
 	</view>
 </template>
 
@@ -138,6 +140,13 @@
 				this.$emit('nextClick')
 
 				if (this.product.index === this.product.total) {
+					// 如果只是查看结果，不再重复提交
+					if (userInfo.over_view) {
+						uni.navigateTo({
+							url: '/pages/complete/complete',
+						})
+						return
+					}
 					// 提交
 					userInfo.is_complete = true
 					uni.showLoading({

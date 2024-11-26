@@ -17,3 +17,7 @@ export function getSysInfo(params) {
 	return request('/user/getInfo', 'GET', params)	
 }
 
+export function getRecordReq(params) {
+	return request('/user/getRecord', 'GET', params)	
+}
+

@@ -1,5 +1,6 @@
 <template>
 	<view class="root">
+		<UserInfo />
 		<view class="container">
 			<view class="progress">
 				<view class="zhanbi" :style="{width: (index + 1) / total * 100 + '%'}" />
@@ -25,6 +26,7 @@
 
 <script>
 	import newProduct from '@/components/newProduct.vue'
+	
 	import {
 		getQuestionList
 	} from '@/api/user'
