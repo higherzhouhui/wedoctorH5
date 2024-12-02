@@ -14,7 +14,7 @@
 			<view>
 				<text class="ysj">已收集{{item.total}}</text>
 				<span class="divider">/</span>
-				<text class="target">目标{{item.target}}</text>
+				<text class="target">目标{{item.target || 0}}</text>
 			</view>
 			<view class="time">项目截止日期{{item.endTime}}&nbsp;&nbsp;{{item.left}}</view>
 		</view>

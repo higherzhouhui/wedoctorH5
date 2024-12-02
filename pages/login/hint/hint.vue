@@ -42,7 +42,7 @@
 						if (res.data.status) {
 							uni.showModal({
 								title: '任务完成',
-								content: `${res.data.total}/${res.data.target}\n恭喜您已经完成目标收集份数！`,
+								content: `${res.data.total}/${res.data.target || 0}\n恭喜您已经完成目标收集份数！`,
 								showCancel: false,
 								confirmText: '我知道了'
 							})
