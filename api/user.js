@@ -21,3 +21,7 @@ export function getRecordReq(params) {
 	return request('/user/getRecord', 'GET', params)	
 }
 
+export function getUserStatusReq(params) {
+	return request('/user/getUserStatus', 'GET', params)	
+}
+

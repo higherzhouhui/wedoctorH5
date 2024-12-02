@@ -1,26 +1,22 @@
 <template>
 	<view class="record-content">
 		<UserInfo></UserInfo>
-		<view class="img-wrapper"><image src="../../static/record.png" mode="heightFix" class="record-img"></image></view>
+		<view class="img-wrapper">
+			<image src="../../static/record.png" mode="heightFix" class="record-img"></image>
+		</view>
 		<view class="user">
 			<view class="left">签约手机号：<b>{{this.$store.state.userInfo.phone}}</b></view>
 			<view class="right">姓名：<b>{{this.$store.state.userInfo.name}}</b></view>
 		</view>
-		<view class="table">
-			<view class="header table-list">
-				<view class="header-item header-big">问卷名称</view>
-				<view class="header-item header-big">截止</view>
-				<view class="header-item">目标</view>
-				<view class="header-item">已收集</view>
-				<!-- <view class="header-item">待完成</view> -->
+		<view v-for="item in list" :key="item.id" class="list">
+			<view class="title">{{item.title}}</view>
+			<view class="sub-title">{{item.description}}</view>
+			<view>
+				<text class="ysj">已收集{{item.total}}</text>
+				<span class="divider">/</span>
+				<text class="target">目标{{item.target}}</text>
 			</view>
-			<view class="table-list" v-for="(item,index) in list" :key="index">
-				<view class="header-item header-big">{{item.title}}</view>
-				<view class="header-item header-big">{{item.endTime}}</view>
-				<view class="header-item">{{item.total}}</view>
-				<view class="header-item" style="color: green;">{{item.complete}}</view>
-				<!-- <view class="header-item">待完成</view> -->
-			</view>
+			<view class="time">项目截止日期{{item.endTime}}&nbsp;&nbsp;{{item.left}}</view>
 		</view>
 	</view>
 </template>
@@ -28,11 +24,14 @@
 <script>
 	import moment from 'moment/moment';
 	import UserInfo from '@/components/userInfo.vue'
-	import { getRecordReq } from '@/api/user.js'
+	import {
+		getRecordReq
+	} from '@/api/user.js'
 	export default {
 		data() {
 			return {
 				list: [],
+				questionInfo: {}
 			};
 		},
 		components: {
@@ -47,11 +46,39 @@
 				const res = await getRecordReq()
 				uni.hideLoading()
 				if (res.code == 200) {
-					res.data.map((item) =>{
+					res.data.map((item) => {
+						if (item.endTime) {
+							const diff = new Date(item.endTime).getTime() - new Date().getTime()
+							if (diff > 0) {
+								item.left = this.convertTimestamp(diff)
+							} else {
+								item.left = '已截止'
+							}
+						}
 						item.endTime = item.endTime ? moment(item.endTime).format('YYYY-MM-DD') : '-'
 					})
 					this.list = res.data
 				}
+			},
+			convertTimestamp(timestamp) {
+				// 计算总天数、小时、分钟和秒
+				const totalSeconds = Math.floor(timestamp / 1000);
+				const days = Math.floor(totalSeconds / (24 * 3600));
+				const hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
+				const minutes = Math.floor((totalSeconds % 3600) / 60);
+				const seconds = totalSeconds % 60;
+
+				let str = ''
+				if (days) {
+					str += `${days}天`
+				}
+				if (hours) {
+					str += `${hours}时`
+				}
+				if (minutes) {
+					str += `${minutes}分`
+				}
+				return `剩余:${str}`
 			}
 		}
 	}
@@ -60,48 +87,52 @@
 <style lang="scss" scoped>
 	.record-content {
 		padding: 0 12px 12px 8px;
+
 		.user {
 			display: flex;
 			justify-content: space-between;
 			margin-bottom: 6px;
 		}
-		.table {
-			background: rgba(0, 0, 0, 0.1);
-			border-radius: 8px;
-			min-height: calc(100vh - 200px);
-			padding: 8px 4px;
-			overflow: auto;
-		}
-		.table-list {
-			display: flex;
-			width: 100%;
-			margin-bottom: 8px;
-			color: #222;
-			font-size: 12px;
-			border-bottom: 1px solid #aaa;
-			padding-bottom: 3px;
-			.header-item {
-				text-align: center;
-				flex: 1;
+
+		.list {
+			background: #eee;
+			border-radius: 12px;
+			padding: 12px;
+
+			.title {
+				color: blueviolet;
+				font-size: 15px;
 			}
-			.header-big {
-				flex: 1.5;
-				max-height: 44px;
-				overflow: hidden;
-				text-overflow: ellipsis;
+
+			.sub-title {
+				opacity: 0.8;
+				font-size: 12px;
 			}
-		}
-		.header {
-			font-weight: bold;
-			font-size: 13px;
-			border-bottom: 1px solid;
-			color: #000;
+
+			.ysj {
+				color: red;
+			}
+
+			.divider {
+				margin: 0 6px;
+			}
+
+			.target {
+				color: green;
+			}
+
+			.time {
+				opacity: 0.8;
+				font-size: 12px;
+			}
 		}
 	}
+
 	.img-wrapper {
 		text-align: center;
 		margin: 2rem 0;
 	}
+
 	.record-img {
 		height: 60px;
 		object-fit: contain;

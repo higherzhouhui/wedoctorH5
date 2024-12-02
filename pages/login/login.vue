@@ -5,13 +5,21 @@
 			<view class="subtitle">此问卷表需要登录后填答</view>
 			<form class="formStyle" @submit="formSubmit">
 				<view class="label">
+					<image src="../../static/login/id.png" class="phoneImg"></image>姓名
+				</view>
+				<view class="inputForm">
+					<input name="name" type="text" maxlength="20" v-model="name" class="inputStyle" placeholder="请输入姓名">
+					<image v-if="name" src="../../static/login/close.png" class="clear" @tap="() => name = ''"></image>
+				</view>
+
+				<view class="label">
 					<image src="../../static/login/phone.png" class="phoneImg"></image>签约手机号
 				</view>
 				<view class="inputForm">
 					<input name="phone" type="tel" maxlength="11" v-model="phone" class="inputStyle"
 						placeholder="请输入手机号" />
-					<image v-if="phone" src="../../static/login/close.png" class="clear"
-						@tap="() => phone = ''"></image>
+					<image v-if="phone" src="../../static/login/close.png" class="clear" @tap="() => phone = ''">
+					</image>
 				</view>
 				<view class="label">
 					<image src="../../static/login/yzm.png" class="phoneImg"></image>验证码
@@ -19,25 +27,20 @@
 				<view class="inputForm">
 					<input name="code" type="tel" maxlength="6" v-model="code" class="inputStyle"
 						placeholder="请输入验证码" />
-					<image v-if="code" src="../../static/login/close.png" class="clear"
-						@tap="() => code = ''"></image>
+					<image v-if="code" src="../../static/login/close.png" class="clear" @tap="() => code = ''"></image>
 					<view :class="downTime ? 'getCode downTime' : 'getCode'" @tap="getCode">
 						{{downTime ? `${downTime}秒后重发` : '获取验证码'}}
 					</view>
-				</view>
-				<view class="label">
-					<image src="../../static/login/id.png" class="phoneImg"></image>姓名
-				</view>
-				<view class="inputForm">
-					<input name="name" type="text" maxlength="20" v-model="name" class="inputStyle"
-						placeholder="请输入姓名">
-					<image v-if="name" src="../../static/login/close.png" class="clear"
-						@tap="() => name = ''"></image>
 				</view>
 				<view class="errorWrapper" v-if="errorMsg">
 					<image src="../../static/login/error.png" class="errorImg"></image>
 					<text class="errorText">{{ errorMsg }}</text>
 				</view>
+				<!-- <view class="remeber">
+					<checkbox-group @change="onRememberChange">
+						<checkbox :value="true" :checked="checked">记住账号信息</checkbox>
+					</checkbox-group>
+				</view> -->
 				<button class="submit" form-type="submit" :loading="loading">登录</button>
 			</form>
 		</view>
@@ -74,19 +77,33 @@
 				timer: '',
 				name: '',
 				title: '',
+				isRemember: 'true',
+				checked: true,
+				question_list_id: '',
 			}
 		},
 		onShow() {
 			this.int()
 		},
 		onLoad() {
+			try {
+				const loginInfo = uni.getStorageSync('loginInfo')
+				if (loginInfo) {
+					const obj = JSON.parse(loginInfo)
+					this.name = obj.name
+					this.phone = obj.phone
+				}
+			} catch {
+
+			}
 			uni.showLoading()
-			getSysInfo().then(res =>{
+			getSysInfo().then(res => {
 				uni.hideLoading()
 				if (res.code === 200) {
 					const data = res.data
 					if (data.info) {
 						this.title = data.info.title
+						this.question_list_id = data.info.id
 						uni.setStorageSync('questionInfo', JSON.stringify(data.info))
 					} else {
 						uni.showModal({
@@ -117,6 +134,9 @@
 				}
 				// #endif
 			},
+			onRememberChange(e) {
+				this.isRemember = e.detail.value[0]
+			},
 			getCode() {
 				if (this.downTime) {
 					return
@@ -125,15 +145,17 @@
 					this.errorMsg = '手机号不能为空'
 					return
 				}
-				
-				if(this.phone.length !== 11) {
+
+				if (this.phone.length !== 11) {
 					this.errorMsg = '请输入正确的手机号'
 					return
 				}
 				uni.showLoading({
 					title: '正在发送中...',
 				})
-				getCodeRequest({phone: this.phone}).then((res) => {
+				getCodeRequest({
+					phone: this.phone
+				}).then((res) => {
 					uni.hideLoading()
 					if (res.code === 200) {
 						uni.showToast({
@@ -152,7 +174,7 @@
 							icon: 'none'
 						})
 					}
-				})	
+				})
 			},
 			formSubmit(data) {
 				// 正在请求不再向下执行
@@ -164,13 +186,13 @@
 					code,
 					name
 				} = data?.detail?.value
-				
+
 				if (!phone) {
 					this.errorMsg = '手机号不能为空'
 					return
 				}
-				
-				if(phone.length !== 11) {
+
+				if (phone.length !== 11) {
 					this.errorMsg = '请输入正确的手机号'
 					return
 				}
@@ -187,9 +209,18 @@
 					phone: phone,
 					code: code,
 					name: name,
+					question_list_id: this.question_list_id
 				}).then(response => {
 					this.loading = false
 					if (response.code === 200) {
+						if (this.isRemember) {
+							uni.setStorageSync('loginInfo', JSON.stringify({
+								phone,
+								name
+							}))
+						} else {
+							uni.removeStorageSync('loginInfo')
+						}
 						uni.showToast({
 							title: '登录成功'
 						})
@@ -230,6 +261,7 @@
 
 <style scoped lang="scss">
 	@import "@/static/customicons.scss";
+
 	.logotitle {
 		margin: 50px 0 30px 0;
 		font-size: 22px;
@@ -237,12 +269,13 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+
 		.logo {
 			width: 121px;
 			height: 75px;
 		}
 	}
-	
+
 	.loginBg {
 		width: 100%;
 		object-fit: cover;
@@ -250,7 +283,7 @@
 
 	.container {
 		background-color: #fff;
-		min-height: 680px;
+		min-height: 700px;
 		height: 100vh;
 		box-sizing: border-box;
 		background: #E3EBF9;
@@ -263,7 +296,7 @@
 	.main {
 		position: relative;
 		z-index: 9;
-		padding: 1rem;
+		padding: 0 1rem 1rem 1rem;
 	}
 
 	.label {
@@ -310,6 +343,7 @@
 
 	.inputForm {
 		position: relative;
+
 		.clear {
 			width: 20px;
 			height: 20px;
@@ -317,12 +351,14 @@
 			right: 0;
 			top: 0;
 		}
+
 		.getCode {
 			position: absolute;
 			right: 30px;
 			top: 0;
 			color: $primaryColor;
 		}
+
 		.downTime {
 			color: #999;
 		}
@@ -334,7 +370,7 @@
 		line-height: 21px;
 		padding-bottom: 7px;
 		color: #000;
-	
+
 		&::placeholder {
 			font-size: 15px;
 			font-family: PingFang SC-Regular, PingFang SC;
@@ -381,12 +417,13 @@
 	}
 
 	.submit {
-		width: 300px;
+		width: 320px;
 		height: 40px;
 		background: $primaryColor;
 		border-radius: 22px;
-		margin: 32px auto 0 auto;
+		margin: 28px auto 0 auto;
 		font-size: 15px;
+		letter-spacing: 5px;
 		font-family: PingFang SC-Medium, PingFang SC;
 		font-weight: 500;
 		color: #FFFFFF;
@@ -413,6 +450,7 @@
 		bottom: 30px;
 		text-align: center;
 		padding: 0 20px;
+
 		.agress {
 			font-size: 13px;
 			font-family: PingFang SC-Regular, PingFang SC;
@@ -431,11 +469,17 @@
 		}
 	}
 
+	.remeber {
+		margin-top: 10px;
+	}
+
 	.sexContainer {
 		padding: 6px;
+
 		.top {
 			background: #fff;
 			border-radius: 12px;
+
 			.retry {
 				border-bottom: 1px solid #b5b5b5;
 				height: 50px;
@@ -444,6 +488,7 @@
 				color: $primaryColor;
 				font-size: 17px;
 				position: relative;
+
 				.gou {
 					position: absolute;
 					right: 12px;
@@ -453,13 +498,16 @@
 					height: 18px;
 				}
 			}
+
 			.retry:first-child {
 				color: #999;
 			}
+
 			.retry:last-child {
 				border: none;
 			}
 		}
+
 		.logout {
 			margin-top: 8px;
 			border-radius: 12px;

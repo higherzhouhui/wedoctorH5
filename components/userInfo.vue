@@ -74,6 +74,7 @@
 				})
 			},
 			handleLogout() {
+				this.$refs['operationRef'].close()
 				this.Logout().then(() => {
 					uni.navigateTo({
 						url: '/pages/login/login'
