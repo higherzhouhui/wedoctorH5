@@ -87,12 +87,19 @@
 		},
 		onLoad() {
 			try {
-				const loginInfo = uni.getStorageSync('loginInfo')
-				if (loginInfo) {
-					const obj = JSON.parse(loginInfo)
-					this.name = obj.name
-					this.phone = obj.phone
+				if (location.search) {
+					const params = new URLSearchParams(location.search)
+					this.name = params.get('name')
+					this.phone = params.get('phone')
+				} else {
+					const loginInfo = uni.getStorageSync('loginInfo')
+					if (loginInfo) {
+						const obj = JSON.parse(loginInfo)
+						this.name = obj.name
+						this.phone = obj.phone
+					}
 				}
+			
 			} catch {
 
 			}

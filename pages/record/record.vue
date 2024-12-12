@@ -1,6 +1,6 @@
 <template>
 	<view class="record-content">
-		<UserInfo></UserInfo>
+		<UserInfo :hideText="true"></UserInfo>
 		<view class="img-wrapper">
 			<image src="../../static/record.png" mode="heightFix" class="record-img"></image>
 		</view>
@@ -9,6 +9,10 @@
 			<view class="right">姓名：<b>{{this.$store.state.userInfo.name}}</b></view>
 		</view>
 		<view v-for="item in list" :key="item.id" class="list">
+			<view class="share" @click="share">
+				分享
+				<image src="../../static/complete/share.png" mode="widthFix" class="share-img"></image>
+			</view>
 			<view class="title">{{item.title}}</view>
 			<view class="sub-title">{{item.description}}</view>
 			<view>
@@ -41,6 +45,19 @@
 			this.initData()
 		},
 		methods: {
+			share() {
+				  const textToCopy = `${location.origin}?phone=${this.$store.state.userInfo.phone}&name=${this.$store.state.userInfo.name}`
+				  const textArea = document.createElement("textarea");
+				  textArea.value = textToCopy;
+				  document.body.appendChild(textArea);
+				  textArea.select();
+				  document.execCommand("copy");
+				  document.body.removeChild(textArea);
+				  uni.showToast({
+				  	title: '√ 已复制到粘贴板',
+					icon: 'none'
+				  })
+			},
 			async initData() {
 				uni.showLoading()
 				const res = await getRecordReq()
@@ -93,7 +110,15 @@
 			justify-content: space-between;
 			margin-bottom: 6px;
 		}
-
+		.share {
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+			gap: 4px;
+			.share-img {
+				width: 18px;
+			}
+		}
 		.list {
 			background: #eee;
 			border-radius: 12px;

@@ -1,8 +1,8 @@
 <template>
 	<view>
 		<view class="avatar" @tap="handleShowPop" :class="home && 'custom'">
-			<image class="theavatar" src="../static/complete/detail.png" v-if="home"></image>
-			<image class="theavatar" src="../static/complete/avatar.png" v-else></image>
+			<image class="theavatar" src="../static/complete/avatar.png"></image>
+			<view class="desc" v-if="!home && !hideText">查看详情</view>
 		</view>
 		<uni-popup ref="operationRef" :animation="true" type="bottom">
 			<view class="lcontent">
@@ -26,6 +26,10 @@
 		name: "userInfo",
 		props: {
 			home: {
+				type: Boolean,
+				default: false,
+			},
+			hideText: {
 				type: Boolean,
 				default: false,
 			},
@@ -92,11 +96,15 @@
 		right: 2rem;
 		top: 2rem;
 		z-index: 99;
+		text-align: center;
 		.theavatar {
-			border: 2px solid #fff;
-			width: 40px;
-			height: 40px;
+			width: 36px;
+			height: 36px;
 			border-radius: 50%;
+		}
+		.desc {
+			font-size: 12px;
+			color: #26993A;
 		}
 	}
 	.custom {
