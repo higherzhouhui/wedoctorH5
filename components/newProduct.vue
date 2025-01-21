@@ -154,7 +154,11 @@
 						icon: 'none'
 					})
 					this.$store.commit('SET_USERINFO', userInfo)
-					resultCreate(userInfo).then(res => {
+					
+					resultCreate({
+						...userInfo,
+						t: Date.now(),
+					}).then(res => {
 						uni.hideLoading()
 						if (res.code === 200) {
 							uni.showToast({

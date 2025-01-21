@@ -7,7 +7,7 @@
 				<image src="../../static/complete/done.png" mode="widthFix" class="done"></image>
 			</view>
 			<view class="anser">您已完成该问卷</view>
-			<view class="btn btn-new" @tap="routeToIndex">继续查看问卷</view>
+			<!-- <view class="btn btn-new" @tap="routeToIndex">继续查看问卷</view> -->
 			<view class="btn" @tap="handleRetry">填写新问卷</view>
 		</view>
 	</view>
