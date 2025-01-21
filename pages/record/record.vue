@@ -123,7 +123,7 @@
 			background: #eee;
 			border-radius: 12px;
 			padding: 12px;
-
+			margin-bottom: 12px;
 			.title {
 				color: blueviolet;
 				font-size: 15px;
